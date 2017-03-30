@@ -50,12 +50,13 @@ Explain exactly what you'll have at the end. What will it be able to do at the l
 
 What exactly will you produce at the end of the project? A piece of software, yes, but what will it do? Here are some questions to think about (and answer depending on your application).
 
-Will it run on some data, like batch mode? Will you present some analytical results of the processing? How can it be re-run on different source data?
 
-Will it be interactive? Can you show it working? This project involves a live demo, so interactivity is good.
+Will it run on some data, like batch mode? Will you present some analytical results of the processing? How can it be re-run on different source data?  no except maybe looking for difficulty
+
+Will it be interactive? Can you show it working? This project involves a live demo, so interactivity is good. yesssssss very interactive
 
 ### Evaluation of Results
-How will you know if you are successful? 
+How will you know if you are successful? if it generates a good maze (good = solvable but not obvious) that the user can solve
 If you include some kind of _quantitative analysis,_ that would be good.
 
 ## Architecture Diagram
