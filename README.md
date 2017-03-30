@@ -1,6 +1,7 @@
 # Labyrinth
 
 ### Statement
+jess likes the graphics and game implementation
 Describe your project. Why is it interesting? Why is it interesting to you personally? What do you hope to learn? 
 This project creates random mazes with at least one guaranteed path that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  Potential stretch goals include hiding prizes in the maze and a multiplayer version.
 
@@ -9,20 +10,20 @@ Explain what approaches from class you will bring to bear on the project.
 
 Be explicit about the techiques from the class that you will use. For example:
 
-- Will you use data abstraction? How?     yes
-- Will you use recursion? How?            yes
-- Will you use map/filter/reduce? How?    maybe/probably
-- Will you use object-orientation? How?   yeah sure
-- Will you use functional approaches to processing your data? How?  um
-- Will you use state-modification approaches? How? (If so, this should be encapsulated within objects. `set!` pretty much should only exist inside an object.)      we will probably use rand, I assume that has a built-in state modification?
+- Will you use data abstraction? How?     yes, maze object     jess says yes also for music player 
+- Will you use recursion? How?            yes, building, walking maze   
+- Will you use map/filter/reduce? How?    maybe/probably, set maze direction values to true/false   jess says also need for block
+- Will you use object-orientation? How?   yeah sure, maze object      jess says music player, all of our objects will be objects
+- Will you use functional approaches to processing your data? How?  "Are we even processing the data?"  -Jess
+- Will you use state-modification approaches? How? (If so, this should be encapsulated within objects. `set!` pretty much should only exist inside an object.)      we will probably use rand, I assume that has a built-in state modification? and music player says Jess
 - Will you build an expression evaluator, like we did in the symbolic differentatior and the metacircular evaluator?  no
-- Will you use lazy evaluation approaches?  no idea maybe
+- Will you use lazy evaluation approaches?  no idea maybe jess -probably not
 
 The idea here is to identify what ideas from the class you will use in carrying out your project. 
 
 **Your project will be graded, in part, by the extent to which you adopt approaches from the course into your implementation, _and_ your discussion about this.**
 
-### External Technologies
+### External Technologies *********** we are not using these
 You are encouraged to develop a project that connects to external systems. For example, this includes systems that:
 
 - retrieve information or publish data to the web
@@ -32,7 +33,7 @@ You are encouraged to develop a project that connects to external systems. For e
 
 If your project will do anything in this category (not only the things listed above!), include this section and discuss.
 
-### Data Sets or other Source Materials
+### Data Sets or other Source Materials ****************no sirree
 If you will be working with existing data, where will you get those data from? (Dowload from a website? Access in a database? Create in a simulation you will build? ...)
 
 How will you convert your data into a form usable for your project?  
@@ -43,6 +44,9 @@ If you are using some other starting materials, explain what they are. Basically
 
 ### Deliverable and Demonstration
 Explain exactly what you'll have at the end. What will it be able to do at the live demo?
+-at the minimum, a signle player maze game
+  -potentially a multi-player maze game
+  -we will be able to let someone solve a maze (jess says meybe leave this out (or potentially a series of mazes of increasing difficulty -- stretch goal)) tell difficulty with number of branching wrong paths and number of turns and length
 
 What exactly will you produce at the end of the project? A piece of software, yes, but what will it do? Here are some questions to think about (and answer depending on your application).
 
