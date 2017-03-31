@@ -38,19 +38,13 @@ Create several paragraphs of narrative to explain the pieces and how they intero
 ## Schedule
 
 ### First Milestone (Sun Apr 9)
-Which portion of the work will be completed (and committed to Github) by this day?
-
-Getting a working maze structure. Testing for keyboard control.
+By the first milestone, we hope to have the maze object working and drawing reasonably good mazes.  This will also require the part of the field object that draws the maze to be working.  Doing this will involve finishing the maze object and refining it so that it draws realistic mazes.
 
 ### Second Milestone (Sun Apr 16)
-Which portion of the work will be completed (and committed to Github) by this day? 
-
-Get the maze into the field. Also bring in other objects such as blob and music player.
+By the second milestone, we hope to have a maze integrated into the field along with the other objects required; e.g., the sprite, and have the music player at least somewhat connected to the game.
 
 ### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28 [your date to be determined later])
-What additionally will be completed before the public presentation?
-
-Getting a working game. Meaning refining game logic and collision detection. 
+For the public presentation, we will have to successfully receive keyboard input from a user, refine the game logic, implement collision detection (detecting whether a sprite will collide with a wall if it moves in a particular direction), and generally have the game ready to be played. 
 
 ## Group Responsibilities
 Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
