@@ -1,9 +1,7 @@
 # Labyrinth
 
 ### Statement
-jess likes the graphics and game implementation
-Describe your project. Why is it interesting? Why is it interesting to you personally? What do you hope to learn? 
-This project creates random mazes with at least one guaranteed path that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  Potential stretch goals include hiding prizes in the maze and a multiplayer version.
+This project creates random mazes with at least one guaranteed throughpath that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  If time allows, stretch goals include hiding prizes in the maze and a multiplayer version.  Jess is interested in the project because she likes computer graphics and the game logic; Jooseppi is interested in it because he likes designing abstract data structures to solve real-world problems.
 
 ### Analysis
 Explain what approaches from class you will bring to bear on the project.
@@ -20,6 +18,7 @@ Be explicit about the techiques from the class that you will use. For example:
 - Will you use lazy evaluation approaches?  no idea maybe jess -probably not
 
 The idea here is to identify what ideas from the class you will use in carrying out your project. 
+
 
 **Your project will be graded, in part, by the extent to which you adopt approaches from the course into your implementation, _and_ your discussion about this.**
 
