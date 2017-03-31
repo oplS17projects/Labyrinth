@@ -76,13 +76,19 @@ You will be expected to turn in code, documentation, and data (as appropriate) a
 Write concrete steps for your schedule to move from concept to working system. 
 
 ### First Milestone (Sun Apr 9)
-Which portion of the work will be completed (and committed to Github) by this day? 
+Which portion of the work will be completed (and committed to Github) by this day?
+
+Getting a working maze structure. Testing for keyboard control.
 
 ### Second Milestone (Sun Apr 16)
-Which portion of the work will be completed (and committed to Github) by this day?  
+Which portion of the work will be completed (and committed to Github) by this day? 
+
+Get the maze into the field. Also bring in other objects such as blob and music player.
 
 ### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28 [your date to be determined later])
 What additionally will be completed before the public presentation?
+
+Getting a working game. Meaning refining game logic and collision detection. 
 
 ## Group Responsibilities
 Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
@@ -92,7 +98,10 @@ Please use Github properly: each individual must make the edits to this file rep
 In the headings below, replace the silly names and GitHub handles with your actual ones.
 
 ### Jessica J. Lai @sagishi
-will write the....
+Music player, game and field logic. 
 
 ### Jooseppi J. Luna @DaBigTuna
-will work on...  
+Data structures underlying maze, drawing maze for field.
+
+### Shared responsibilities
+Keyboard control and animation. Event handling. Overall architecture design.
