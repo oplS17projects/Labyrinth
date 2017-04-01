@@ -9,9 +9,9 @@ The labyrinth game is implemented using the 2hdtp/universe library with support 
 The game logic takes input from the keyboard and from the game field and directs the field and the music player in changing state corresponding to events both on the field (hitting a maze wall) and from the user (keyboard).  The game logic will most likely be implemented as a procedure that takes in a series of arguments and calls a procedure or procedures to change the state of the playing field.  This is an example of functional programming, because the output of the game logic procedure is solely dependent on the inputs and does not produce any side effects.  
 
 The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, blob image, and time-passed display on it.  The maze image is constructed using data from the maze object, the blob is a sprite that moves through the maze, and the time-passed display displays how long the player has been playing the game. The music player is an object that takes a list of music files(track) and has the following methods. 
-  -play: takes the name of a music file and finds the corresponding entry in the track using member? to find the first ocurrence of the name and using first to extract this from the list and plays it once.
-  -playlist: takes a list of music files and uses for each to call play on each element in the list in order one by one.
-  -loop: takes the name of a music file and a count and while the count is greater than 0 counts down and plays what it is given(a playlist or a single file). Each time it is played, the count is set! to one less than itself to keep track of how many times it has played.
+- play: takes the name of a music file and finds the corresponding entry in the track using member? to find the first ocurrence of the name and using first to extract this from the list and plays it once.
+- playlist: takes a list of music files and uses for each to call play on each element in the list in order one by one.
+- loop: takes the name of a music file and a count and while the count is greater than 0 counts down and plays what it is given(a playlist or a single file). Each time it is played, the count is set! to one less than itself to keep track of how many times it has played.
   
 
 
@@ -26,12 +26,7 @@ The maze object is an opaque object (this is an example of object-oriented progr
 - Will you build an expression evaluator, like we did in the symbolic differentatior and the metacircular evaluator?  hahahaha.... no
 - Will you use lazy evaluation approaches?  no idea maybe jess -probably not
 
-
-
-**Your project will be graded, in part, by the extent to which you adopt approaches from the course into your implementation, _and_ your discussion about this.**
-
 ### Deliverable and Demonstration
-Explain exactly what you'll have at the end. What will it be able to do at the live demo?
 The aim for the project is to produce a single-player labyrinth game that a player will be able to play by moving a sprite through the maze to solve it.  At the live demo, we hope to have the game working such that a person will be able to walk up to the computer, start a game, and solve mazes under a time clock.  We might potentially build the game to keep track of players and scores to see who does the best.  Optional extras (stretch goals) include hiding prizes in the labyrinth for a player to collect and having a multiplayer version where two people start from different parts of the maze and both try to reach the end while collecting as many prizes as possible.
 
 ### Evaluation of Results
@@ -50,13 +45,10 @@ By the first milestone, we hope to have the maze object working and drawing reas
 ### Second Milestone (Sun Apr 16)
 By the second milestone, we hope to have a maze integrated into the field along with the other objects required; e.g., the sprite, and have the music player at least somewhat connected to the game.
 
-### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28 [your date to be determined later])
+### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28)
 For the public presentation, we will have to successfully receive keyboard input from a user, refine the game logic, implement collision detection (detecting whether a sprite will collide with a wall if it moves in a particular direction), and generally have the game ready to be played. 
 
 ## Group Responsibilities
-Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
-
-Please use Github properly: each individual must make the edits to this file representing their own section of work.
 
 ### Jessica J. Lai @sagishi
 Jess will be in charge of incorporating music in to the game (whether that means exploring rsound or improving the current Music player for more customized support using rsound and other methods). Jess is also in charge of developing and prototyping for game and field logic for the control methods of the game. 
