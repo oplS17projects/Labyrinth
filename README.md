@@ -4,8 +4,8 @@
 This project creates random mazes with at least one guaranteed throughpath that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  If time allows, stretch goals include hiding prizes in the maze and a multiplayer version.  Jess is interested in the project because she likes computer graphics and the game logic; Jooseppi is interested in it because he likes designing abstract data structures to solve real-world problems.
 
 ## Architecture Diagram
-Upload the architecture diagram you made for your slide presentation to your repository, and include it in-line here.
-
+This is the architecture diagram for Labyrinth:
++![architecture-diagram](/labyrinth-architecture-diagram.png?raw=true "architecture-diagram")
 Create several paragraphs of narrative to explain the pieces and how they interoperate.
 
 ### Analysis
