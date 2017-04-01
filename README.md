@@ -4,11 +4,11 @@
 This project creates random mazes with at least one guaranteed throughpath that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  If time allows, stretch goals include hiding prizes in the maze and a multiplayer version.  Jess is interested in the project because she likes computer graphics and the game logic; Jooseppi is interested in it because he likes designing abstract data structures to solve real-world problems.
 
 ### Analysis
-The labyrinth game is implemented using the 2hdtp/universe library (JESS WHAT ARE YOU USING FOR THE MUSIC).  There are four main parts to it: the game logic, the playing field, the music player, and the maze object.  
+The labyrinth game is implemented using the 2hdtp/universe library with support from 2hdtp/image library for graphics and support from GUI and possibly rsound aswell for music.  There are four main parts to it: the game logic, the playing field, the music player, and the maze object.  
 
 The game logic takes input from the keyboard and from the game field and directs the field and the music player in changing state corresponding to events both on the field (hitting a maze wall) and from the user (keyboard).  The game logic will most likely be implemented as a procedure that takes in a series of arguments and calls a procedure or procedures to change the state of the playing field.  This is an example of functional programming, because the output of the game logic procedure is solely dependent on the inputs and does not produce any side effects.  
 
-The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, blob image, and time-passed display on it.  The maze image is constructed using data from the maze object, the blob is a sprite that moves through the maze, and the time-passed display displays how long the player has ben playing the game.  JESS COULD YOU TALK ABOUT THE MUSIC PLAYER HERE.  
+The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, blob image, and time-passed display on it.  The maze image is constructed using data from the maze object, the blob is a sprite that moves through the maze, and the time-passed display displays how long the player has been playing the game. The music player is an object that takes a list of music files methods such as play(play   
 
 The maze object is an opaque object (this is an example of object-oriented programming and data abstraction) that uses a list of coordinates and true/false values to represent the maze.  Each entry in the list represents a block in the maze; a block has two numbers that describe its coordinates, and a list of four true/false values indicating what directions a player is allowed to move in.  It is built with a constructor that uses tail recursion to build the list.  The path through the maze will be set by a recursive procedure that uses rand (and so state modification) to set a path through the maze, and then a mapping function will randomly set the rest of the direction flags in the object to true o false with consideration to surrounding flags to make sure that object actually looks like a maze (i.e., with lots of possible paths, not just lots of incoherent lines).
 
@@ -20,6 +20,8 @@ The maze object is an opaque object (this is an example of object-oriented progr
 - Will you use state-modification approaches? How? (If so, this should be encapsulated within objects. `set!` pretty much should only exist inside an object.)      we will probably use rand, I assume that has a built-in state modification? and music player says Jess
 - Will you build an expression evaluator, like we did in the symbolic differentatior and the metacircular evaluator?  hahahaha.... no
 - Will you use lazy evaluation approaches?  no idea maybe jess -probably not
+
+
 
 **Your project will be graded, in part, by the extent to which you adopt approaches from the course into your implementation, _and_ your discussion about this.**
 
@@ -52,7 +54,7 @@ Here each group member gets a section where they, as an individual, detail what 
 Please use Github properly: each individual must make the edits to this file representing their own section of work.
 
 ### Jessica J. Lai @sagishi
-Music player, game and field logic. 
+Jess will be in charge of incorporating music in to the game (whether that means exploring rsound or improving the current Music player for more customized support using rsound and other methods). Jess is also in charge of developing and prototyping for game and field logic for the control methods of the game. 
 
 ### Jooseppi J. Luna @DaBigTuna
 Jooseppi will be in charge of building the underlying labyrinth data structure and drawing the labyrinth for the field.
