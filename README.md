@@ -3,6 +3,11 @@
 ### Statement
 This project creates random mazes with at least one guaranteed throughpath that the user can solve by moving through the maze using keyboard inputs (probably arrow keys).  If time allows, stretch goals include hiding prizes in the maze and a multiplayer version.  Jess is interested in the project because she likes computer graphics and the game logic; Jooseppi is interested in it because he likes designing abstract data structures to solve real-world problems.
 
+## Architecture Diagram
+Upload the architecture diagram you made for your slide presentation to your repository, and include it in-line here.
+
+Create several paragraphs of narrative to explain the pieces and how they interoperate.
+
 ### Analysis
 The labyrinth game is implemented using the 2hdtp/universe library with support from 2hdtp/image library for graphics and support from GUI and possibly rsound aswell for music.  There are four main parts to it: the game logic, the playing field, the music player, and the maze object.  
 
@@ -12,8 +17,6 @@ The playing field is implemented as a world using the 2hdtp teachpack.  It has a
 - play: takes the name of a music file and finds the corresponding entry in the track using member? to find the first ocurrence of the name and using first to extract this from the list and plays it once.
 - playlist: takes a list of music files and uses for each to call play on each element in the list in order one by one.
 - loop: takes the name of a music file and a count and while the count is greater than 0 counts down and plays what it is given(a playlist or a single file). Each time it is played, the count is set! to one less than itself to keep track of how many times it has played.
-  
-
 
 The maze object is an opaque object (this is an example of object-oriented programming and data abstraction) that uses a list of coordinates and true/false values to represent the maze.  Each entry in the list represents a block in the maze; a block has two numbers that describe its coordinates, and a list of four true/false values indicating what directions a player is allowed to move in.  It is built with a constructor that uses tail recursion to build the list.  The path through the maze will be set by a recursive procedure that uses rand (and so state modification) to set a path through the maze, and then a mapping function will randomly set the rest of the direction flags in the object to true o false with consideration to surrounding flags to make sure that object actually looks like a maze (i.e., with lots of possible paths, not just lots of incoherent lines).
 
@@ -31,11 +34,6 @@ The aim for the project is to produce a single-player labyrinth game that a play
 
 ### Evaluation of Results
 The project will be successful if it generates a good labyrinth that the user can solve by  moving through with a sprite.  A good labyrinth is defined as a labyrinth that has at least one solution and no obvious solutions.
-
-## Architecture Diagram
-Upload the architecture diagram you made for your slide presentation to your repository, and include it in-line here.
-
-Create several paragraphs of narrative to explain the pieces and how they interoperate.
 
 ## Schedule
 
