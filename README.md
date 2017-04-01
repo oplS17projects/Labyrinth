@@ -5,7 +5,7 @@ This project creates random mazes with at least one guaranteed throughpath that 
 
 ## Architecture Diagram
 This is the architecture diagram for Labyrinth:
-![architecture-diagram](/labyrinth-architecture-diagram.png?raw=true "architecture-diagram")
+![architecture-diagram](/labyrinth-architecture-diagram-updated.png?raw=true "architecture-diagram")
 From the above diagram, we can see that the central part of the game is the logic, which controls the playing field and the music player.  The game logic takes input from the user (via the keyboard) and from the game field and directs the field and the music player in changing state corresponding to events on the field and commands from the user.  
 
 The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, sprite, and timer on it.  The maze image is constructed using data from the maze object, and the sprite is an object in its own right that moves in response to commands from the game logic.  
