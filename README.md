@@ -8,7 +8,7 @@ This is the architecture diagram for Labyrinth:
 ![architecture-diagram](/labyrinth-architecture-diagram-updated.png?raw=true "architecture-diagram")
 From the above diagram, we can see that the central part of the game is the logic, which controls the playing field and the music player.  The game logic takes input from the user (via the keyboard) and from the game field and directs the field and the music player in changing state corresponding to events on the field and commands from the user.  
 
-The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, sprite, and timer on it.  The maze image is constructed using data from the maze object, and the sprite is an object in its own right that moves in response to commands from the game logic.  
+The playing field is implemented as a world using the 2hdtp teachpack.  It has a background image, maze image, and character sprite on it.  The maze image is constructed using data from the maze object, and the sprite is an object in its own right that moves in response to commands from the game logic.  
 
 The music player is an object that takes a list of music files, (a track), and has methods for play, playlist, and loop.  Play takes the name of a music file and finds the corresponding entry in the track and plays it once.  Playlist takes a list of music files and plays it in order.  Loop takes the name of a music file and a count and plays a signle music file or playlist for a specified number of times.  The game logic can call the music player with any of the methods depending on what is happening in the game. 
 
