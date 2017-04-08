@@ -61,14 +61,6 @@
         (get-row-helper (cdr remaining-maze))))
   (get-row-helper maze))
 
-;; Getter for column ;; NOT FINISHED THIS WILL NOT WORK RN
-(define (get-column column-num)
-  (define (get-row-helper remaining-maze)
-    (if (= column-num (cadaar remaining-maze))
-        (car remaining-maze)
-        (get-row-helper (cdr remaining-maze))))
-  (get-row-helper maze))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;    Debugging Functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
