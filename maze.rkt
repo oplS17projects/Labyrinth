@@ -64,13 +64,13 @@
     maze)
   
   ;; Getter for values in cell -- version where you pass coordinates
-  (define (get-cell-values-coords part row cell)
-    (cond ((equal? part 'left) (car (get-directions-list row cell)))
-          ((equal? part 'down) (cadr (get-directions-list row cell)))
-          ((equal? part 'up) (caddr (get-directions-list row cell)))
-          ((equal? part 'right) (cadddr (get-directions-list row cell)))
-          ((equal? part 'dir-list) (get-directions-list row cell))
-          ((equal? part 'cell) (get-cell row cell))))
+  (define (get-cell-values-coords part row column)
+    (cond ((equal? part 'left) (car (get-directions-list row column)))
+          ((equal? part 'down) (cadr (get-directions-list row column)))
+          ((equal? part 'up) (caddr (get-directions-list row column)))
+          ((equal? part 'right) (cadddr (get-directions-list row column)))
+          ((equal? part 'dir-list) (get-directions-list row column))
+          ((equal? part 'cell) (get-cell row column))))
   
   ;; Getter for values in cell -- version where you pass cell
   (define (get-cell-values-cell part cell)
@@ -92,16 +92,16 @@
     (get-cell-values-coords 'cell 0 0))
   
   ;; Get cell based on coords -- not for user
-  (define (get-cell row-num cell-num)
-    (define (helper current-cell-num row)
-      (if (= cell-num current-cell-num)
+  (define (get-cell row-num column-num)
+    (define (helper current-column-num row)
+      (if (= column-num current-column-num)
           (car row)
-          (helper (+ current-cell-num 1) (cdr row))))
+          (helper (+ current-column-num 1) (cdr row))))
     (helper 0 (get-row row-num)))
   
   ;; Getter for directions list in cell
-  (define (get-directions-list row-num cell-num)
-    (caddr (get-cell row-num cell-num)))
+  (define (get-directions-list row-num column-num)
+    (caddr (get-cell row-num column-num)))
   
   ;; Getter for row
   (define (get-row row-num)
@@ -168,6 +168,8 @@
 ;
 ;;; function for mapping over entire list with set-flags
 ;(maze-map set-flags test-maze)
+
+(provide make-maze)
             
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   EOF    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
