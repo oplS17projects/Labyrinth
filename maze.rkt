@@ -1,5 +1,11 @@
 #lang racket
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;    Debugging Functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define test-maze-size 10)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;    Procedures related to the construction of the maze    ;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -48,7 +54,7 @@
         ((equal? part 'column) (cadr cell))))
 
 ;; Getter for values in cell -- version where you pass cell
-(define (get-cell-values-maze part cell)
+(define (get-cell-values-cell part cell)
   (begin (define directions (caddr cell))
   (cond ((equal? part 'left) (car directions))
         ((equal? part 'down) (cadr directions))
@@ -79,11 +85,13 @@
   ; map over columns
   1)
 
-(define (map proc items)
-  (if (null? items)
-      '()
-      (cons (proc (car items))
-            (map proc (cdr items)))))
+;(define (map proc items)
+;  (if (null? items)
+;      '()
+;      (cons (proc (car items))
+;            (map proc (cdr items)))))
+
+(define test-maze (make-maze test-maze-size))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;    Procedures for making maze random    ;;;;;;;;;;;;;;;;;;;
@@ -96,23 +104,21 @@
   (if (= (random 3) 2)
       #f
       #t))
-
-;; (get-cell-values-maze part cell)
+;;NEED TO FIGURE OUT OUTER WALLS YO
 ;; function for setting each direction flag randomly
 ;;    this function takes in a cell and returns a cell
 (define (set-flags cell)
   (list
-   (get-cell-values 'column cell)
-   (get-cell-values 'row cell)
-   (make-random-directions-list cell)))
+   (get-cell-values-cell 'column cell)
+   (get-cell-values-cell 'row cell)
+   (make-random-dir-list (get-cell-values-cell 'directions-list cell))))
 
-(define (make-random-directions-list cell)
-  (if (null? direction-list
+(define (make-random-dir-list dir-list)
+  (if (null? dir-list)
+      '()
+      (if (car dir-list)
+          (cons #t (make-random-dir-list cdr dir-list))
+          (cons (random-true-false) (make-random-dir-list cdr dir-list)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;    Debugging Functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define test-maze-size 10)
-
-(define test-maze (make-maze test-maze-size))
+;; function for mapping over entire list with set-flags
+(maze-map set-flags test-maze)
