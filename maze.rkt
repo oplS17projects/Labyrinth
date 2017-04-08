@@ -45,14 +45,17 @@
   (define maze (maze-constructor height))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Getters    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Getter for maze -- returns maze structure
+  (define (get-maze)
+    maze)
+  
   ;; Getter for values in cell -- version where you pass coordinates
   (define (get-cell-values-coords part row cell)
-    (cond ((equal? part 'left) (car (get-directions-list row cell maze)))
-          ((equal? part 'down) (cadr (get-directions-list row cell maze)))
-          ((equal? part 'up) (caddr (get-directions-list row cell maze)))
-          ((equal? part 'right) (cadddr (get-directions-list row cell maze)))
-          ((equal? part 'row) (car cell))
-          ((equal? part 'column) (cadr cell))
+    (cond ((equal? part 'left) (car (get-directions-list row cell)))
+          ((equal? part 'down) (cadr (get-directions-list row cell)))
+          ((equal? part 'up) (caddr (get-directions-list row cell)))
+          ((equal? part 'right) (cadddr (get-directions-list row cell)))
+          ((equal? part 'dir-list) (get-directions-list row cell))
           ((equal? part 'cell) (get-cell row cell))))
   
   ;; Getter for values in cell -- version where you pass cell
@@ -62,33 +65,29 @@
                  ((equal? part 'down) (cadr directions))
                  ((equal? part 'up) (caddr directions))
                  ((equal? part 'right) (cadddr directions))
-                 ((equal? part 'direction-list) directions)
-                 ((equal? part 'row) (car cell))
-                 ((equal? part 'column) (cadr cell)))))
+                 ((equal? part 'dir-list) directions)
+                 ((equal? part 'row) (cadr cell))
+                 ((equal? part 'column) (car cell)))))
   
   ;; Getter for cell with max coordinates
   (define (get-max-cell)
     (get-cell-values-coords 'cell (- height 1) (- height 1)))
   
-    ;; Getter for cell with min coordinates
+  ;; Getter for cell with min coordinates
   (define (get-min-cell)
     (get-cell-values-coords 'cell 0 0))
   
   ;; Get cell based on coords -- not for user
-  (define (get-cell row-num cell)
-    (define (helper current-cell row)
-      (if (= cell current-cell)
+  (define (get-cell row-num cell-num)
+    (define (helper current-cell-num row)
+      (if (= cell-num current-cell-num)
           (car row)
-          (helper (+ current-cell 1) (cdr row))))
+          (helper (+ current-cell-num 1) (cdr row))))
     (helper 0 (get-row row-num)))
   
-  ;; Getter for directions list in cell -- not for user
-  (define (get-directions-list row-num cell-wanted maze)
-    (define (get-cell cell-num row-of-cells maze)
-      (if (= cell-num (car row-of-cells))
-          (caddr row-of-cells)
-          (get-cell (cdr row-of-cells) cell-num)))
-    (get-cell (get-row row-num maze) cell-wanted))
+  ;; Getter for directions list in cell
+  (define (get-directions-list row-num cell-num)
+    (caddr (get-cell row-num cell-num)))
   
   ;; Getter for row
   (define (get-row row-num)
@@ -117,7 +116,8 @@
           ((eq? message 'get-max-cell) get-max-cell)
           ((eq? message 'get-min-cell) get-min-cell)
           ((eq? message 'row-map) row-map)
-          ((eq? message 'maze-map) maze-map)))
+          ((eq? message 'maze-map) maze-map)
+          ((eq? message 'get-maze) get-maze)))
   
   dispatch)
 
@@ -152,3 +152,10 @@
 ;(maze-map set-flags test-maze)
             
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   EOF    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; testing functions
+;
+;(define maze (make-maze 3))
+;((maze 'get-maze))
+;(define (row-map-test cell)
+;  (list 3 3 (caddr cell)))
