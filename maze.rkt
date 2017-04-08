@@ -35,35 +35,84 @@
   (make-maze-helper height height '()))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;    Getter and Setters for Maze    ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;    Getters, Iterator, and Map for Maze    ;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Getter for direction in cell
-(define (get-direction row cell direction)
-  (cond ((equal? direction 'left) (car (get-directions-list row cell)))
-        ((equal? direction 'down) (cadr (get-directions-list row cell)))
-        ((equal? direction 'up) (caddr (get-directions-list row cell)))
-        ((equal? direction 'right) (cadddr (get-directions-list row cell)))))
+;; Getter for values in cell -- version where you pass maze
+(define (get-cell-values-maze part row cell maze)
+  (cond ((equal? part 'left) (car (get-directions-list row cell maze)))
+        ((equal? part 'down) (cadr (get-directions-list row cell maze)))
+        ((equal? part 'up) (caddr (get-directions-list row cell maze)))
+        ((equal? part 'right) (cadddr (get-directions-list row cell maze)))
+        ((equal? part 'row) (car cell))
+        ((equal? part 'column) (cadr cell))))
+
+;; Getter for values in cell -- version where you pass cell
+(define (get-cell-values-maze part cell)
+  (begin (define directions (caddr cell))
+  (cond ((equal? part 'left) (car directions))
+        ((equal? part 'down) (cadr directions))
+        ((equal? part 'up) (caddr directions))
+        ((equal? part 'right) (cadddr directions))
+        ((equal? part 'direction-list) directions)
+        ((equal? part 'row) (car cell))
+        ((equal? part 'column) (cadr cell)))))
 
 ;; Getter for cell
-(define (get-directions-list row-num cell-wanted)
-  (define (get-cell cell-num row-of-cells)
+(define (get-directions-list row-num cell-wanted maze)
+  (define (get-cell cell-num row-of-cells maze)
     (if (= cell-num (car row-of-cells))
         (caddr row-of-cells)
         (get-cell (cdr row-of-cells) cell-num)))
-  (get-cell (get-row row-num) cell-wanted))
+  (get-cell (get-row row-num maze) cell-wanted))
 
 ;; Getter for row
-(define (get-row row-num)
+(define (get-row row-num maze)
   (define (get-row-helper remaining-maze)
     (if (= row-num (cadaar remaining-maze))
         (car remaining-maze)
         (get-row-helper (cdr remaining-maze))))
   (get-row-helper maze))
 
+;; Map
+(define (maze-map procedure maze)
+  ; map over columns
+  1)
+
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;    Procedures for making maze random    ;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Seeds random with time
+(make-pseudo-random-generator)
+
+(define (random-true-false)
+  (if (= (random 3) 2)
+      #f
+      #t))
+
+;; (get-cell-values-maze part cell)
+;; function for setting each direction flag randomly
+;;    this function takes in a cell and returns a cell
+(define (set-flags cell)
+  (list
+   (get-cell-values 'column cell)
+   (get-cell-values 'row cell)
+   (make-random-directions-list cell)))
+
+(define (make-random-directions-list cell)
+  (if (null? direction-list
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;    Debugging Functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define maze-size 10)
+(define test-maze-size 10)
 
-(define maze (make-maze maze-size))
+(define test-maze (make-maze test-maze-size))
