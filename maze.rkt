@@ -1,11 +1,25 @@
 #lang racket
 
-;; sample cell: (column row left down up right)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;    What is this?    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;    This file creates the data structures and objects required to construct
+;;;;      a maze object.  A maze is a list of rows, and each row is a list of
+;;;;      cells.  Each cell contains its row number, column number, and a list
+;;;;      of booleans denoting which directions one is allowed to move in from
+;;;;      that particular cell.
+
+;;;;;;;;;;;;;;;    How to create and use the maze object    ;;;;;;;;;;;;;;;;;;;
+;;;;    To create a maze object called maze, type the following: 
+;;;;      (define maze (make-maze [size])), where [size] is the size you want
+;;;;      your maze to be.
+;;;;    To call a member function called 'member that takes an argument arg,
+;;;;      type the following: ((maze 'member) arg)).
+;;;;    Member functions are included in the maze object and are fairly self-
+;;;;      explanatory (more documentation will be added later).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;    Procedures for constructing maze    ;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; sample cell: (column row left down up right)
 ;; Define list of directions; same as h j k l in Vim, the greatest text editor
 (define directions-list
   (list #f #f #f #f))
@@ -43,20 +57,20 @@
 (define (make-maze height)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;    Define the maze    ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (define maze (maze-constructor height))
-  
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Getters    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Getter for maze -- returns maze structure
   (define (get-maze)
     maze)
   
   ;; Getter for values in cell -- version where you pass coordinates
-  (define (get-cell-values-coords part row cell)
-    (cond ((equal? part 'left) (car (get-directions-list row cell)))
-          ((equal? part 'down) (cadr (get-directions-list row cell)))
-          ((equal? part 'up) (caddr (get-directions-list row cell)))
-          ((equal? part 'right) (cadddr (get-directions-list row cell)))
-          ((equal? part 'dir-list) (get-directions-list row cell))
-          ((equal? part 'cell) (get-cell row cell))))
+  (define (get-cell-values-coords part row column)
+    (cond ((equal? part 'left) (car (get-directions-list row column)))
+          ((equal? part 'down) (cadr (get-directions-list row column)))
+          ((equal? part 'up) (caddr (get-directions-list row column)))
+          ((equal? part 'right) (cadddr (get-directions-list row column)))
+          ((equal? part 'dir-list) (get-directions-list row column))
+          ((equal? part 'cell) (get-cell row column))))
   
   ;; Getter for values in cell -- version where you pass cell
   (define (get-cell-values-cell part cell)
@@ -78,16 +92,16 @@
     (get-cell-values-coords 'cell 0 0))
   
   ;; Get cell based on coords -- not for user
-  (define (get-cell row-num cell-num)
-    (define (helper current-cell-num row)
-      (if (= cell-num current-cell-num)
+  (define (get-cell row-num column-num)
+    (define (helper current-column-num row)
+      (if (= column-num current-column-num)
           (car row)
-          (helper (+ current-cell-num 1) (cdr row))))
+          (helper (+ current-column-num 1) (cdr row))))
     (helper 0 (get-row row-num)))
   
   ;; Getter for directions list in cell
-  (define (get-directions-list row-num cell-num)
-    (caddr (get-cell row-num cell-num)))
+  (define (get-directions-list row-num column-num)
+    (caddr (get-cell row-num column-num)))
   
   ;; Getter for row
   (define (get-row row-num)
@@ -97,11 +111,12 @@
           (get-row-helper (cdr remaining-maze))))
     (get-row-helper maze))
   
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;    Mapping Functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Map over a particular row
   (define (row-map procedure row-number)
     (map procedure (get-row row-number)))
   
-  ;; Map
+  ;; Map over the whole maze
   (define (maze-map procedure)
     (define (map-over-rows row-num return)
       (if (= row-num height)
@@ -110,6 +125,7 @@
                          (cons (row-map procedure row-num) return))))
     (map-over-rows 0 '()))
   
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Dispatch    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (define (dispatch message)
     (cond ((eq? message 'get-cell-values-coords) get-cell-values-coords)
           ((eq? message 'get-cell-values-cell) get-cell-values-cell)
@@ -120,6 +136,8 @@
           ((eq? message 'get-maze) get-maze)))
   
   dispatch)
+
+;;;;;;;;;;;;;;;;;;;;    JESSICA IGNORE BELOW THIS POINT    ;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;    Procedures for making maze random    ;;;;;;;;;;;;;;;;;;;
@@ -150,6 +168,8 @@
 ;
 ;;; function for mapping over entire list with set-flags
 ;(maze-map set-flags test-maze)
+
+(provide make-maze)
             
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   EOF    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
