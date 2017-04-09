@@ -90,10 +90,6 @@
   ;; Getter for cell with min coordinates
   (define (get-min-cell)
     (get-cell-values-coords 'cell 0 0))
-
-  ;; Getter for the height of the maze
-  (define (get-height)
-    (- height 0))
   
   ;; Get cell based on coords -- not for user
   (define (get-cell row-num column-num)
@@ -135,7 +131,6 @@
           ((eq? message 'get-cell-values-cell) get-cell-values-cell)
           ((eq? message 'get-max-cell) get-max-cell)
           ((eq? message 'get-min-cell) get-min-cell)
-          ((eq? message 'get-height) get-height)
           ((eq? message 'row-map) row-map)
           ((eq? message 'maze-map) maze-map)
           ((eq? message 'get-maze) get-maze)))
