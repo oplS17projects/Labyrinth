@@ -48,7 +48,77 @@
                           (cons (make-row (- counter 1) dimension) row-list))))
   (make-maze-helper dimension dimension '()))
 
-;; Contructor for randomized maze -- this is still coming
+;;;;;;;;;;;;;;;;;    Accessor functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Getter for row
+(define (get-row row-num maze)
+  (define (get-row-helper remaining-maze)
+    (if (= row-num (cadaar remaining-maze))
+        (car remaining-maze)
+        (get-row-helper (cdr remaining-maze))))
+  (get-row-helper maze))
+
+;; Map over a particular row
+(define (row-map procedure row-number maze)
+  (map procedure (get-row row-number maze)))
+  
+;; Map over the whole maze
+(define (maze-map procedure maze height)
+  (define (map-over-rows row-num return)
+    (if (= row-num height)
+        return
+        (map-over-rows (+ row-num 1)
+                       (cons (row-map procedure row-num maze) return))))
+  (map-over-rows 0 '()))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;    Procedures for making maze random    ;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (randtf)
+  (if (= (random 2) 0)
+      #f
+      #t))
+
+(define (randdir)
+  (begin (define rand (random 4))
+         (cond ((= rand 0) 'left)
+               ((= rand 1) 'down)
+               ((= rand 2) 'up)
+               ((= rand 3) 'right))))
+
+(define (rand-flags-if-false cell)
+  (begin (define flags (caddr cell))
+         (list
+          (car cell)
+          (cadr cell)
+          (list (if (eq? (car flags) #t)
+                    #t
+                    (randtf))
+                (if (eq? (cadr flags) #t)
+                    #t
+                    (randtf))
+                (if (eq? (caddr flags) #t)
+                    #t
+                    (randtf))
+                (if (eq? (cadddr flags) #t)
+                    #t
+                    (randtf))))))
+
+(define (make-outer-walls maze dimesion)
+  maze)
+
+(define (make-random maze dimension)
+  (maze-map rand-flags-if-false maze dimension))
+
+(define (make-path maze)
+  maze)
+  
+(define (make-random-maze dimension)
+  (make-outer-walls
+   (make-random
+    (make-path
+     (maze-constructor dimension)) dimension) dimension))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Maze object    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,7 +126,7 @@
 
 (define (make-maze height)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;    Define the maze    ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (define maze (maze-constructor height))
+  (define maze (make-random-maze height))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Getters    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Getter for maze -- returns maze structure
@@ -90,6 +160,10 @@
   ;; Getter for cell with min coordinates
   (define (get-min-cell)
     (get-cell-values-coords 'cell 0 0))
+
+  ;; Getter for the height of the maze
+  (define (get-height)
+    (- height 0))
   
   ;; Get cell based on coords -- not for user
   (define (get-cell row-num column-num)
@@ -131,6 +205,7 @@
           ((eq? message 'get-cell-values-cell) get-cell-values-cell)
           ((eq? message 'get-max-cell) get-max-cell)
           ((eq? message 'get-min-cell) get-min-cell)
+          ((eq? message 'get-height) get-height)
           ((eq? message 'row-map) row-map)
           ((eq? message 'maze-map) maze-map)
           ((eq? message 'get-maze) get-maze)))
@@ -138,37 +213,6 @@
   dispatch)
 
 ;;;;;;;;;;;;;;;;;;;;    JESSICA IGNORE BELOW THIS POINT    ;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;    Procedures for making maze random    ;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;; Seeds random with time
-;(make-pseudo-random-generator)
-;
-;(define (random-true-false)
-;  (if (= (random 3) 2)
-;      #f
-;      #t))
-;;;NEED TO FIGURE OUT OUTER WALLS YO
-;;; function for setting each direction flag randomly
-;;;    this function takes in a cell and returns a cell
-;(define (set-flags cell)
-;  (list
-;   (get-cell-values-cell 'column cell)
-;   (get-cell-values-cell 'row cell)
-;   (make-random-dir-list (get-cell-values-cell 'directions-list cell))))
-;
-;(define (make-random-dir-list dir-list)
-;  (if (null? dir-list)
-;      '()
-;      (if (car dir-list)
-;          (cons #t (make-random-dir-list cdr dir-list))
-;          (cons (random-true-false) (make-random-dir-list cdr dir-list)))))
-;
-;;; function for mapping over entire list with set-flags
-;(maze-map set-flags test-maze)
-
 (provide make-maze)
             
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   EOF    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -177,5 +221,6 @@
 ;
 ;(define maze (make-maze 3))
 ;((maze 'get-maze))
-;(define (row-map-test cell)
-;  (list 3 3 (caddr cell)))
+(define maze (maze-constructor 3))
+(define (row-map-test cell)
+  (list 3 3 (caddr cell)))
