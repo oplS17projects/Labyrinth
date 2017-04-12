@@ -50,6 +50,15 @@
 
 ;;;;;;;;;;;;;;;;;    Accessor functions    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Getters for all parts of the cell
+(define column car)
+(define row cadr)
+(define (flags cell) (caddr cell))
+(define (left cell) (car (flags cell)))
+(define (down cell) (cadr (flags cell)))
+(define (up cell) (caddr (flags cell)))
+(define (right cell) (cadddr (flags cell)))
+
 ;; Getter for row
 (define (get-row row-num maze)
   (define (get-row-helper remaining-maze)
@@ -76,9 +85,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (randtf)
-  (if (= (random 2) 0)
-      #f
-      #t))
+  (begin (define rand (random 9))
+         (cond ((= rand 0) #f)
+               ((= rand 1) #t)
+               ((= rand 2) #f)
+               ((= rand 3) #t)
+               ((= rand 4) #t)
+               ((= rand 5) #t)
+               ((= rand 6) #t)
+               ((= rand 7) #t)
+               ((= rand 8) #f))))
 
 (define (randdir)
   (begin (define rand (random 4))
@@ -88,25 +104,53 @@
                ((= rand 3) 'right))))
 
 (define (rand-flags-if-false cell)
-  (begin (define flags (caddr cell))
          (list
-          (car cell)
-          (cadr cell)
-          (list (if (eq? (car flags) #t)
+          (column cell)
+          (row cell)
+          (list (if (eq? (left cell) #t)
                     #t
                     (randtf))
-                (if (eq? (cadr flags) #t)
+                (if (eq? (down cell) #t)
                     #t
                     (randtf))
-                (if (eq? (caddr flags) #t)
+                (if (eq? (up cell) #t)
                     #t
                     (randtf))
-                (if (eq? (cadddr flags) #t)
+                (if (eq? (right cell) #t)
                     #t
-                    (randtf))))))
+                    (randtf)))))
 
-(define (make-outer-walls maze dimesion)
-  maze)
+(define (set-walls dimension)
+  (define (set-walls-helper cell)
+    (cond ((= (row cell) 0) (list (column cell)
+                                  (row cell)
+                                  (list #f
+                                        (down cell)
+                                        (up cell)
+                                        (right cell))))
+          ((= (column cell) 0) (list (column cell)
+                                     (row cell)
+                                     (list (left cell)
+                                                      #f
+                                                      (up cell)
+                                                      (right cell))))
+          ((= (row cell) (- dimension 1)) (list (column cell)
+                                                (row cell)
+                                                (list (left cell)
+                                                      (down cell)
+                                                      (up cell)
+                                                      #f)))
+          ((= (column cell) (- dimension 1)) (list (column cell)
+                                                   (row cell)
+                                                (list (left cell)
+                                           (down cell)
+                                           #f
+                                           (right cell))))
+          (else cell)))
+  set-walls-helper)
+
+(define (make-outer-walls maze dimension)
+  (maze-map (set-walls dimension) maze dimension))
 
 (define (make-random maze dimension)
   (maze-map rand-flags-if-false maze dimension))
@@ -212,7 +256,8 @@
   
   dispatch)
 
-;;;;;;;;;;;;;;;;;;;;    JESSICA IGNORE BELOW THIS POINT    ;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;    So that this can be included in other programs    ;;;;;;;;;;;;;
+
 (provide make-maze)
             
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   EOF    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -221,6 +266,6 @@
 ;
 ;(define maze (make-maze 3))
 ;((maze 'get-maze))
-(define maze (maze-constructor 3))
-(define (row-map-test cell)
-  (list 3 3 (caddr cell)))
+;(define maze (maze-constructor 3))
+;(define (row-map-test cell)
+;  (list 3 3 (caddr cell)))

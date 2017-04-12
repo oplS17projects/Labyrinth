@@ -1,10 +1,10 @@
 #lang racket
 
-;; "maze.rkt" and whatever file you are working with need to be in the same folder
 (require "maze.rkt")
 (require 2htdp/image)
 
-(define maze (make-maze 4))
+(define maze (make-maze 40))
+((maze 'get-maze))
 
 (define (wall x y color)
   (rectangle x y "solid" color))
@@ -15,10 +15,10 @@
   (empty-scene window_size window_size "gray"))
 
 (define (tile size row column)
-  (let* ([left-c (if ((maze 'get-cell-values-coords) 'left row column) "gray" "brown")]
-         [down-c (if ((maze 'get-cell-values-coords) 'down row column) "gray" "brown")]
-         [up-c (if ((maze 'get-cell-values-coords) 'up row column) "gray" "brown")]
-         [right-c (if ((maze 'get-cell-values-coords) 'right row column) "gray" "brown")])
+  (let* ((left-c (if ((maze 'get-cell-values-coords) 'left row column) "gray" "brown"))
+         (down-c (if ((maze 'get-cell-values-coords) 'down row column) "gray" "brown"))
+         (up-c (if ((maze 'get-cell-values-coords) 'up row column) "gray" "brown"))
+         (right-c (if ((maze 'get-cell-values-coords) 'right row column) "gray" "brown")))
   (place-image (wall (/ size 4) size left-c) 0 (/ size 2)
                (place-image (wall size (/ size 4) down-c) (/ size 2) 0
                             (place-image (wall size (/ size 4) up-c) (/ size 2) size
@@ -34,7 +34,7 @@
 ; (place-tile 1 1)
 
 (define (place-tile row column)
-  (let ([size (/ window_size ((maze 'get-height)))])
+  (let ((size (/ window_size ((maze 'get-height)))))
     (set! field
     (place-image (tile size row column) (+ (* row size) (/ size 2)) (+ (* column size) (/ size 2)) field))))
 
