@@ -2,14 +2,15 @@
 
 (require "maze.rkt")
 (require 2htdp/image)
+(require 2htdp/universe)
 
 (define maze (make-maze 40))
-((maze 'get-maze))
+; ((maze 'get-maze))
 
 (define (wall x y color)
   (rectangle x y "solid" color))
 
-(define window_size 400)
+(define window_size 1000)
 
 (define field
   (empty-scene window_size window_size "gray"))
@@ -44,6 +45,25 @@
         (if (< cur-row ((maze 'get-height)))
             (begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
             (begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
-      field))
+      #t))
     (map-help 0 0))
-      
+
+(define BLOB-right
+  (overlay/offset
+    (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
+   (- 0 (/ window_size ((maze 'get-height)) 6)) (/ window_size ((maze 'get-height)) 6)
+   (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
+
+(define BLOB-left
+  (overlay/offset
+    (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
+   (/ window_size ((maze 'get-height)) 6) (/ window_size ((maze 'get-height)) 6)
+   (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
+
+(create-map) ;;
+
+(define (render-field width)
+  (place-image
+   BLOB-right
+   (/ window_size ((maze 'get-height)) 2) width
+   field))
