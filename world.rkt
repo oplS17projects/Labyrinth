@@ -19,7 +19,7 @@
         ((key=? a-key "right") (begin ((tunez 'play) boop) w))
         (else (begin ((tunez 'play) fail) w))))
 
-; will explain this later need to run
+; handles state changes for the world
 (big-bang 100
           (on-tick sub1)
           (on-key play-tunez)
