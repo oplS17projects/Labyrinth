@@ -36,7 +36,7 @@ By the first milestone, we hope to have the maze object working and drawing reas
 ### Second Milestone (Sun Apr 16)
 By the second milestone, we hope to have a maze integrated into the field along with the other objects required; e.g., the sprite, and have the music player at least somewhat connected to the game.
 
-### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28)
+### Public Presentation (Fri Apr 28)
 For the public presentation, we will have to successfully receive keyboard input from a user, refine the game logic, implement collision detection (detecting whether a sprite will collide with a wall if it moves in a particular direction), and generally have the game ready to be played. 
 
 ## Group Responsibilities
