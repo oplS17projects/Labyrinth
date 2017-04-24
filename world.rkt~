@@ -19,23 +19,9 @@
         ((key=? a-key "right") (begin ((tunez 'play) boop) w))
         (else (begin ((tunez 'play) fail) w))))
 
-; setting up key-board movement for up down left right
-
-
-(define (update_blob w)
-  #t)
-
-(define (handle-key-event w a-key)
-  (cond [(key=? a-key "left" (update_blob w))]
-        [(key=? a-key "right" (update_blob w))]
-        [(= (string-length a-key) 1) w]
-        [(key=? a-key "up" (update_blob w))]
-        [(key=? a-key "down" (update_blob w))]
-        [else w]))
-
 ; handles state changes for the world
 (big-bang 100
-      ;    (on-tick sub1)
+          (on-tick sub1)
           (on-key play-tunez)
-          (to-draw player1)
+          (to-draw render-field)
           (stop-when zero?))

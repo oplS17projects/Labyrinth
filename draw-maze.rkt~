@@ -3,8 +3,6 @@
 (require "maze.rkt")
 (require 2htdp/image)
 (require 2htdp/universe)
-(require lang/posn)
-
 
 (define maze (make-maze 20))
 ; ((maze 'get-maze))
@@ -63,34 +61,12 @@
 ;   (/ window_size ((maze 'get-height)) 6) (/ window_size ((maze 'get-height)) 6)
 ;   (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
 
-;(player1 p1-posn BLOB-right)
-
-(define p1-posn
-  (make-posn (/ window_size ((maze 'get-height)) 2) (/ window_size ((maze 'get-height)) 2)))
-
-;(define p1-x
-;  (/ window_size ((maze 'get-height)) 2))
-
-;(define p1-y
-;  (/ window_size ((maze 'get-height)) 2))
-
-
-(set! p1-posn (make-posn (+ (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-x p1-posn)))
-
-(define (player1 posn image)
-  (place-images
-   (list image)
-   (list posn)
-   field))
-
 (create-map)
 
-;(define (render-field width)
-;  (place-image
-;   BLOB-right
-;   (/ window_size ((maze 'get-height)) 2) width
-;   field))
+(define (render-field width)
+  (place-image
+   BLOB-right
+   (/ window_size ((maze 'get-height)) 2) width
+   field))
 
-;(provide render-field)
-
-(provide player1)
+(provide render-field)
