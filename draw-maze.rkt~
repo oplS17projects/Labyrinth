@@ -54,14 +54,14 @@
 (define BLOB-right
   (overlay/offset
     (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
-   (- 0 (/ window_size ((maze 'get-height)) 6)) (/ window_size ((maze 'get-height)) 15)
+   (- 0 (/ window_size ((maze 'get-height)) 6)) (/ window_size ((maze 'get-height)) 6)
    (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
 
-(define BLOB-left
-  (overlay/offset
-    (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
-   (/ window_size ((maze 'get-height)) 6) (/ window_size ((maze 'get-height)) 15)
-   (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
+;(define BLOB-left
+;  (overlay/offset
+;    (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
+;   (/ window_size ((maze 'get-height)) 6) (/ window_size ((maze 'get-height)) 6)
+;   (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
 
 ;(player1 p1-posn BLOB-right)
 
@@ -74,31 +74,13 @@
 ;(define p1-y
 ;  (/ window_size ((maze 'get-height)) 2))
 
-(define current-image
-  (list BLOB-right))
 
-(define (update_blob_right)
-  (begin (set! p1-posn (make-posn (+ (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
-  (set! current-image (list BLOB-right)))
-  )
+(set! p1-posn (make-posn (+ (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-x p1-posn)))
 
-(define (update_blob_left)
-  (begin (set! p1-posn (make-posn (- (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
-  (set! current-image (list BLOB-left)))
-  )
-
-(define (update_blob_up)
-  (set! p1-posn (make-posn (posn-x p1-posn) (- (posn-y p1-posn) (/ window_size ((maze 'get-height))))))
-  )
-
-(define (update_blob_down)
-  (set! p1-posn (make-posn (posn-x p1-posn) (+ (posn-y p1-posn) (/ window_size ((maze 'get-height))))))
-  )
-
-(define (player1 posn)
+(define (player1 posn image)
   (place-images
-   current-image
-   (list p1-posn)
+   (list image)
+   (list posn)
    field))
 
 (create-map)
@@ -112,7 +94,3 @@
 ;(provide render-field)
 
 (provide player1)
-(provide update_blob_left)
-(provide update_blob_right)
-(provide update_blob_up)
-(provide update_blob_down)
