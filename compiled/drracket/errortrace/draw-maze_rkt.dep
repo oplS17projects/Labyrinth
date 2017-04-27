@@ -1,1 +1,0 @@
-("6.7" ("e09a2b14c3f60172d0ab882a4b2206b889e93530" . "29fa80598d44e8309922c3c627e3d8463a9166c1") #"/Users/Jessica/Documents/github/Labyrinth/maze.rkt" (collects #"2htdp" #"image.rkt") (collects #"2htdp" #"universe.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"lang" #"posn.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
