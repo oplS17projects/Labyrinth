@@ -2,6 +2,7 @@
 
 (require racket/gui)
 (require 2htdp/universe)
+(require (prefix-in htdp: 2htdp/image))
 
 (define bgm1 "nsmb_hurry_up.wav")
 (define bgm2 "nsmb_game_over.wav")
