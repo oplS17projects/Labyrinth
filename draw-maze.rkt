@@ -1,6 +1,7 @@
 #lang racket
 
 (require "maze.rkt")
+(require "music-player.rkt")
 (require 2htdp/image)
 (require 2htdp/universe)
 (require lang/posn)
@@ -50,7 +51,7 @@
       #t))
     (map-help 0 0))
 
-;; creates the blob for moving through the maze
+;; creates the blob for moving through the maze and some constants for the sprite
 (define BLOB-right
   (overlay/offset
     (circle (/ window_size ((maze 'get-height)) 14) "solid" "black")
@@ -63,37 +64,105 @@
    (/ window_size ((maze 'get-height)) 6) (/ window_size ((maze 'get-height)) 15)
    (circle (/ window_size ((maze 'get-height)) 3) "solid" "yellow")))
 
-;(player1 p1-posn BLOB-right)
-
 (define p1-posn
   (make-posn (/ window_size ((maze 'get-height)) 2) (/ window_size ((maze 'get-height)) 2)))
-
-;(define p1-x
-;  (/ window_size ((maze 'get-height)) 2))
-
-;(define p1-y
-;  (/ window_size ((maze 'get-height)) 2))
 
 (define current-image
   (list BLOB-right))
 
+;; functions for updating the position of the player
+;
+;  check if you can move in that position.
+;  if so, update position
+;  else, don't update.  (play a sound to indicate collison??)
+;  for left and right, always update image sprite even if you can't move.
+;;
+
+;; method for getting row and column number given a position
+;  
+;  take current x or y and subtract half of a box (going down to the next closest
+;  divide by the whole box. (gets the row or column number)
+;  works because index starts at 0
+;;
+
+;; actually column row
+
+;(/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+ ;                                 (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+
+;(define move_bool #f)
+
+;(define (can_move direction)
+;(set! move_bool ((maze 'get-cell-values-coords) direction
+ ;                                               (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+  ;                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+   ;                                             )))
+
+(define (can_move direction)
+  (cond [(equal? direction 'right)
+         (if (= (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) (- ((maze 'get-height)) 1))
+             #f
+         (and ((maze 'get-cell-values-coords) direction
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
+              ((maze 'get-cell-values-coords) 'left
+                                              (+ (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 1)
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))))]
+        [(equal? direction 'left)
+         (if (= (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 0)
+             #f
+         (and ((maze 'get-cell-values-coords) direction
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
+              ((maze 'get-cell-values-coords) 'right
+                                              (- (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 1)
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))))]
+        [(equal? direction 'up)
+         (if (= (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 0)
+             #f
+         (and ((maze 'get-cell-values-coords) 'down
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
+              ((maze 'get-cell-values-coords) 'up
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (- (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 1))))]
+        [(equal? direction 'down)
+         (if (= (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) (- ((maze 'get-height)) 1))
+             #f
+         (and ((maze 'get-cell-values-coords) 'up
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
+              ((maze 'get-cell-values-coords) 'down
+                                              (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
+                                              (+ 1 (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))))))]))
+
 (define (update_blob_right)
-  (begin (set! p1-posn (make-posn (+ (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
-  (set! current-image (list BLOB-right)))
+  (if (can_move 'right)
+      (begin (set! p1-posn (make-posn (+ (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
+                (set! current-image (list BLOB-right)) ((tunez 'play) beep))
+         (begin (set! current-image (list BLOB-right)) ((tunez 'play) boop)))
   )
 
 (define (update_blob_left)
-  (begin (set! p1-posn (make-posn (- (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
-  (set! current-image (list BLOB-left)))
+  (if (can_move 'left)
+      (begin (set! p1-posn (make-posn (- (posn-x p1-posn) (/ window_size ((maze 'get-height)))) (posn-y p1-posn)))
+             (set! current-image (list BLOB-left)) ((tunez 'play) beep))
+      (begin (set! current-image (list BLOB-left)) ((tunez 'play) boop)))
   )
 
 (define (update_blob_up)
-  (set! p1-posn (make-posn (posn-x p1-posn) (- (posn-y p1-posn) (/ window_size ((maze 'get-height))))))
+  (if (can_move 'up)
+      (begin (set! p1-posn (make-posn (posn-x p1-posn) (- (posn-y p1-posn) (/ window_size ((maze 'get-height)))))) ((tunez 'play) beep))
+      ((tunez 'play) boop))
   )
 
 (define (update_blob_down)
-  (set! p1-posn (make-posn (posn-x p1-posn) (+ (posn-y p1-posn) (/ window_size ((maze 'get-height))))))
+  (if (can_move 'down)
+      (begin (set! p1-posn (make-posn (posn-x p1-posn) (+ (posn-y p1-posn) (/ window_size ((maze 'get-height)))))) ((tunez 'play) beep))
+      ((tunez 'play) boop))
   )
+
+;; rendering function
 
 (define (player1 posn)
   (place-images
@@ -101,15 +170,16 @@
    (list p1-posn)
    field))
 
+; define names or sounds to ake code prettier
+(define beep "beep.wav")
+(define boop "boop.wav")
+(define fail "fail.wav")
+
+; create a music player object
+(define tunez (music-player (list beep boop fail)))
+
+
 (create-map)
-
-;(define (render-field width)
-;  (place-image
-;   BLOB-right
-;   (/ window_size ((maze 'get-height)) 2) width
-;   field))
-
-;(provide render-field)
 
 (provide player1)
 (provide update_blob_left)
