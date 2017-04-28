@@ -24,8 +24,8 @@
          (up-c (if ((maze 'get-cell-values-coords) 'up row column) "gray" "brown"))
          (right-c (if ((maze 'get-cell-values-coords) 'right row column) "gray" "brown")))
   (place-image (wall (/ size 4) size left-c) 0 (/ size 2)
-               (place-image (wall size (/ size 4) down-c) (/ size 2) 0
-                            (place-image (wall size (/ size 4) up-c) (/ size 2) size
+               (place-image (wall size (/ size 4) up-c) (/ size 2) 0
+                            (place-image (wall size (/ size 4) down-c) (/ size 2) size
                                          (place-image (wall (/ size 4) size right-c) size (/ size 2)
                                                       (rectangle size size "solid" "gray")))))))
 
@@ -120,19 +120,19 @@
         [(equal? direction 'up)
          (if (= (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 0)
              #f
-         (and ((maze 'get-cell-values-coords) 'down
+         (and ((maze 'get-cell-values-coords) direction
                                               (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
                                               (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
-              ((maze 'get-cell-values-coords) 'up
+              ((maze 'get-cell-values-coords) 'down
                                               (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
                                               (- (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) 1))))]
         [(equal? direction 'down)
          (if (= (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))) (- ((maze 'get-height)) 1))
              #f
-         (and ((maze 'get-cell-values-coords) 'up
+         (and ((maze 'get-cell-values-coords) direction
                                               (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
                                               (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height)))))
-              ((maze 'get-cell-values-coords) 'down
+              ((maze 'get-cell-values-coords) 'up
                                               (/ (- (posn-x p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))
                                               (+ 1 (/ (- (posn-y p1-posn) (/ window_size ((maze 'get-height)) 2)) (/ window_size ((maze 'get-height))))))))]))
 
