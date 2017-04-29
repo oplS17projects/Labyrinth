@@ -19,7 +19,7 @@ Tha maze is created by drawing tiles for all blocks into the field. The tiles ar
 
 ### Analysis
 
-###Libaries used
+### Libaries used
 
 ``` racket
 (require 2htdp/image)
@@ -43,13 +43,13 @@ Our own libraries.
 * The ```draw-maze.rkt``` library provided the ability to draw the maze and render the sprite inside the maze.
 * The ```music-player.rkt``` library provided the data structure for the music player.
 
-###Key Code Excerpts
+### Key Code Excerpts
 
 This project uses many of the concepts we have learned in this class, such as...
 
 - Data abstraction:
 
-Data abstraction is used in the maze structure, where the list describing the maze is hidden inside a maze object and only accessible via accessor functions. 
+Data abstraction is used in the maze structure, where the list describing the maze is hidden inside a maze object and only accessible via accessor functions.  Shown below are the constructor for the maze and a set of accessor functions for it.
 
 ``` racket
 (define (maze-constructor dimension)
@@ -60,7 +60,6 @@ Data abstraction is used in the maze structure, where the list describing the ma
                     dimension
                     (cons (make-row (- counter 1) dimension) row-list))))
   (make-maze-helper dimension dimension '()))
-
 
 (define (get-cell-values-coords part row column)
   (cond ((equal? part 'left) (car (get-directions-list row column)))
@@ -73,7 +72,7 @@ Data abstraction is used in the maze structure, where the list describing the ma
 
 - Recursion:
 
-Tail recursion is used to build the maze and to place the tiles in to the field. State modification is also used to continue updating the state of the field until the whole maze has been placed in.
+Tail recursion is used to build the maze and to place the tiles in to the field. State modification is also used to continue updating the state of the field until the whole maze has been placed in.  Below is an excerpt of code that is used to place the tiles in the field when drawing the maze.
 
 ``` racket
 (define (create-map)
@@ -88,7 +87,7 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
 
 - Mapping over lists:
 
-Mapping is used for setting the direction flags in the maze object.
+Mapping is used for modifying the direction flags in the maze, and is used often enough that a special mapping function for maze was built, which was based on a mapping procedure for a specific row in the maze.  Below is the code used for this:
 
 ``` racket
 ;; Map over a particular row
@@ -107,29 +106,30 @@ Mapping is used for setting the direction flags in the maze object.
 
 - Object-orientation:
 
-The maze and music player are implemented as objects.  Here is an excerpt of code for the music player:
+The maze and music player are implemented as objects.  Here is an excerpt of the code for the music player:
 
 ``` racket
 (define (music-player track)
-(define (play name)
-(play-sound (first (member name track)) #f) #f)
-(define (loop name count)
-(if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
-#f))
-(define (playlist list)
-(for-each (lambda (name) (play name)) list)#f)
-(define (option method)
-(cond ((eq? method 'play) play)
-((eq? method 'loop) loop)
-((eq? method 'playlist) playlist)
-(else (error "Unknown option: music player"
-method))))
-option)
+  (define (play name)
+    (play-sound (first (member name track)) #f) #f)
+  (define (loop name count)
+    (if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
+        #f))
+  (define (playlist list)
+    (for-each (lambda (name) (play name)) list)#f)
+  (define (option method)
+    (cond ((eq? method 'play) play)
+          ((eq? method 'loop) loop)
+          ((eq? method 'playlist) playlist)
+          (else (error "Unknown option: music player"
+                       method))))
+  option)
 ```
 
 - State-modification:
 
-The music player uses state modification to for the loop function, and rand, which is implemented using state-modification, will probably be used for building the maze.
+The music player uses state modification to for the loop function, and rand, which is implemented using state-modification, is used for building the maze.
+
 ``` racket
 (define (loop name count)
   (if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
@@ -142,14 +142,14 @@ In the project, we have created a single-player labyrinth game that a player wil
 ### Evaluation of Results
 The project is successful if it generates a good labyrinth that the user can solve by moving through with a sprite.  A good labyrinth is defined as a labyrinth that has at least one solution and no obvious solutions.
 
-There is no obvious solution, it is randomized, but we were unable to guarantee a path.
+There is no obvious solution -- the maze is randomized -- but we were unable to guarantee a path.
 
 ## Schedule
 
 ### First Milestone (Sun Apr 9)
 By the first milestone, we created a working maze object and implemented functionality to draw the maze using the underlying data structure. The music player was created before this point for a previous exploration.
 
-Work done:
+- Work done:
 Jooseppi completed a basic structure of the maze object, started working on randomizing the maze.
 Jessica used the maze object and wrote functions that generated the image of the field with the maze.
 
@@ -158,7 +158,7 @@ We have also discussed future implementation methods for collision detection and
 ### Second Milestone (Sun Apr 16)
 By the second milestone, we had taken the maze, sprite and music player and integrated them into the field created using 2HDTP/universe; e.g., the sprite, and have the music player at least somewhat connected to the game.
 
-Work done:
+- Work done:
 
 We put the blob and maze in the same world and implemented a simple demo for key detection using the music player where different sounds are played based on which key is struck.
 
