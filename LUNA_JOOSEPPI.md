@@ -4,42 +4,22 @@
 ### 29 April 2017
 
 # Overview
-This set of code provides an interface to searching through one's Google Drive account. 
-Its most important feature is that it provides a *folder-delimited search*.
+This project creates random mazes that the user could solve by moving through the maze using keyboard inputs using arrow keys with sound effects.  The main part of the project that I tackled was implementing the maze.
 
-The essential model of files in Google Drive is that they are in one big “pile.” So you can't directly find a file in a
-given folder.
-
-This code recursively collects all folders found within a given folder, and then 
-construct a search query that includes a list of all the subfolders (flattened into a single list).
-
-This then allows you to perform a folder-delimited search.
+The maze is represented as a list of rows, which are represented as a list of cells.  Each cell is a list built in the following pattern: '(column row (left down up right)), where column and row are the coordinates of a particular cell, and the list of directions contains #t/#f flags to show which directions can be moved in from a particular cell.  Other class concepts used in the construction of the maze are discussed below and include recursion, mapping over lists, data abstraction and object-oriented programming, and function composition.
 
 **Authorship note:** All of the code described here was written by me.
 
 # Libraries Used
-The code uses four libraries:
-
-```
-(require net/url)
-(require (planet ryanc/webapi:1:=1/oauth2))
-(require json)
-(require net/uri-codec)
-```
-
-* The ```net/url``` library provides the ability to make REST-style https queries to the Google Drive API.
-* Ryan Culpepper's ```webapi``` library is used to provide the ```oauth2``` interface required for authentication.
-* The ```json``` library is used to parse the replies from the Google Drive API.
-* The ```net/uri-codec``` library is used to format parameters provided in API calls into an ASCII encoding used by Google Drive.
+Libraries?  None.  Real men don't need no stinkin' libraries.
 
 # Key Code Excerpts
-
 Here is a discussion of the most essential procedures, including a description of how they embody ideas from 
 UMass Lowell's COMP.3010 Organization of Programming languages course.
 
 Five examples are shown and they are individually numbered. 
 
-## 1. Initialization using a Global Object
+## 1. Recursion
 
 The following code creates a global object, ```drive-client``` that is used in each of the subsequent API calls:
 
@@ -53,7 +33,7 @@ The following code creates a global object, ```drive-client``` that is used in e
  While using global objects is not a central theme in the course, it's necessary to show this code to understand
  the later examples.
  
-## 2. Selectors and Predicates using Procedural Abstraction
+## 2. Mapping over lists
 
 A set of procedures was created to operate on the core ```drive-file``` object. Drive-files may be either
 actual file objects or folder objects. In Racket, they are represented as a hash table.
@@ -79,7 +59,8 @@ associated with a ```drive#fileList``` object:
 (define (get-id obj)
   (hash-ref obj 'id))
 ```
-## 3. Using Recursion to Accumulate Results
+
+## 3. Object-Oriented Programming and Data Abstraction
 
 The low-level routine for interacting with Google Drive is named ```list-children```. This accepts an ID of a 
 folder object, and optionally, a token for which page of results to produce.
@@ -102,6 +83,7 @@ for getting the next page. The ```list-children``` just gets one page:
                                 ))
     token)))
 ```
+
 The interesting routine is ```list-all-children```. This routine is directly invoked by the user.
 It optionally accepts a page token; when it's used at top level this parameter will be null.
 
@@ -114,7 +96,6 @@ a recursive call to get the next page (and possibly more pages).
 Ultimately, when there are no more pages to be had, the routine terminates and returns the current page. 
 
 This then generates a recursive process from the recursive definition.
-
 ```
 (define (list-all-children folder-id . next-page-token)
   (let* ((this-page (if (= 0 (length next-page-token))
@@ -127,7 +108,7 @@ This then generates a recursive process from the recursive definition.
         (get-files this-page))))
 ```
 
-## 4. Filtering a List of File Objects for Only Those of Folder Type
+## 4. Function Composition
 
 The ```list-all-children``` procedure creates a list of all objects contained within a given folder.
 These objects include the files themselves and other folders.
@@ -138,21 +119,4 @@ contained in a given folder:
 ```
 (define (list-folders folder-id)
   (filter folder? (list-all-children folder-id)))
-```
-
-## 5. Recursive Descent on a Folder Hierarchy
-
-These procedures are used together in ```list-all-folders```, which accepts a folder ID and recursively
-obtains the folders at the current level and then recursively calls itself to descend completely into the folder
-hierarchy.
-
-```map``` and ```flatten``` are used to accomplish the recursive descent:
-
-```
-(define (list-all-folders folder-id)
-  (let ((this-level (list-folders folder-id)))
-    (begin
-      (display (length this-level)) (display "... ")
-      (append this-level
-              (flatten (map list-all-folders (map get-id this-level)))))))
 ```
