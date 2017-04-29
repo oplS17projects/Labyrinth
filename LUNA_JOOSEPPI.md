@@ -21,43 +21,65 @@ Five examples are shown and they are individually numbered.
 
 ## 1. Recursion
 
-The following code creates a global object, ```drive-client``` that is used in each of the subsequent API calls:
+Recursion was literally all over the place in this project, but one of the main places it was used was in the construcion of the maze itself.  The maze was constructed by a tail-recursive procedure that consed together a bunch of rows, which were constructed tail-recursively from individual cells.  Below is the code that does this:
 
-```
-(define drive-client
-  (oauth2-client
-   #:id "548798434144-6s8abp8aiqh99bthfptv1cc4qotlllj6.apps.googleusercontent.com"
-   #:secret "<email me for secret if you want to use my API>"))
- ```
- 
- While using global objects is not a central theme in the course, it's necessary to show this code to understand
- the later examples.
+``` racket
+;; sample cell: (column row (left down up right))
+
+;; Define list of directions; same as h j k l in Vim, the world's greatest 
+;;  text editor
+(define directions-list
+  (list #f #f #f #f))
+
+;; Constructor for cell object
+(define (make-cell pos-in-row row-id-number)
+  (list pos-in-row row-id-number directions-list))
+
+;; Constructor for a row in a maze
+(define (make-row row-id-number length)
+  (define (make-row-helper counter cell-list)
+    (if (= 0 counter)
+        cell-list
+        (make-row-helper (- counter 1)
+                         (cons (make-cell (- counter 1) row-id-number)
+                               cell-list))))
+  (make-row-helper length '()))
+
+;; Constructor for the maze
+(define (maze-constructor dimension)
+  (define (make-maze-helper counter dimension row-list)
+    (if (= 0 counter)
+        row-list
+        (make-maze-helper (- counter 1)
+                          dimension
+                          (cons (make-row (- counter 1) dimension) row-list))))
+  (make-maze-helper dimension dimension '()))
+  ```
  
 ## 2. Mapping over lists
 
-A set of procedures was created to operate on the core ```drive-file``` object. Drive-files may be either
-actual file objects or folder objects. In Racket, they are represented as a hash table.
+The maze is constructed with all direction values in all cells set to false, so to change these values, the whole maze is mapped over with a function that randomizes the flags in each cell, and then another function that sets the outer walls of the maze to false so that you can't escape the maze.  Here is the code for `maze-map` and `row-map`, the two mapping functions I built for this project.
 
-```folder?``` accepts a ```drive-file```, inspects its ```mimeType```, and returns ```#t``` or ```#f```:
-
+``` racket
+;; Map over a particular row
+(define (row-map procedure row-number maze)
+  (map procedure (get-row row-number maze)))
+  
+;; Map over the whole maze
+(define (maze-map procedure maze height)
+  (define (map-over-rows row-num return)
+    (if (= row-num height)
+        return
+        (map-over-rows (+ row-num 1)
+                       (cons (row-map procedure row-num maze) return))))
+  (map-over-rows 0 '()))
 ```
-(define (folder? drive-file)
-  (string=? (hash-ref drive-file 'mimeType "nope") "application/vnd.google-apps.folder"))
-```
 
-Another object produced by the Google Drive API is a list of drive-file objects ("```drive#fileList```"). 
-When converted by the JSON library,
-this list appears as hash map. 
+And here is an exampe use of maze-map in the function that sets the walls in the maze to false:
 
-```get-files``` retrieves a list of the files themselves, and ```get-id``` retrieves the unique ID
-associated with a ```drive#fileList``` object:
-
-```
-(define (get-files obj)
-  (hash-ref obj 'files))
-
-(define (get-id obj)
-  (hash-ref obj 'id))
+``` racket
+(define (make-outer-walls maze dimension)
+  (maze-map (set-walls dimension) maze dimension))
 ```
 
 ## 3. Object-Oriented Programming and Data Abstraction
@@ -70,18 +92,7 @@ results at a time. So it's necessary to step through each page. When a page is r
 for getting the next page. The ```list-children``` just gets one page:
 
 ```
-(define (list-children folder-id . next-page-token)
-  (read-json
-   (get-pure-port
-    (string->url (string-append "https://www.googleapis.com/drive/v3/files?"
-                                "q='" folder-id "'+in+parents"
-                                "&key=" (send drive-client get-id)
-                                (if (= 1 (length next-page-token))
-                                    (string-append "&pageToken=" (car next-page-token))
-                                    "")
-;                                "&pageSize=5"
-                                ))
-    token)))
+
 ```
 
 The interesting routine is ```list-all-children```. This routine is directly invoked by the user.
@@ -110,13 +121,37 @@ This then generates a recursive process from the recursive definition.
 
 ## 4. Function Composition
 
-The ```list-all-children``` procedure creates a list of all objects contained within a given folder.
-These objects include the files themselves and other folders.
+Function composition is all over the place in this code.   One of the better examples of it is in the randomization of the maze, which is accomplished by a two-line procedure that ends up causing four other user-defined procedures to evaluate.  This is the maze randomization procedure:
 
-The ```filter``` abstraction is then used with the ```folder?``` predicate to make a list of subfolders
-contained in a given folder:
-
+``` racket
+(define (make-random maze dimension)
+  (maze-map rand-flags-if-false maze dimension))
 ```
-(define (list-folders folder-id)
-  (filter folder? (list-all-children folder-id)))
+
+This invokes the `maze-map` procedure, described above, with the `rand-flags-if-false` procedure, which takes a cell as an argument and coughs out a cell with all the false flags replaced with random flags.  The true flags are left alone because they define the path through the maze.  It looks like this:
+
+``` racket
+(define (rand-flags-if-false cell)
+         (list
+          (column cell)
+          (row cell)
+          (list (if (eq? (left cell) #t)
+                    #t
+                    (randtf))
+                (if (eq? (down cell) #t)
+                    #t
+                    (randtf))
+                (if (eq? (up cell) #t)
+                    #t
+                    (randtf))
+                (if (eq? (right cell) #t)
+                    #t
+                    (randtf)))))
+```
+
+This in turn calls the fourth user-defined procedure, randtf, which randomly produces a true/false flag, with bias toward true flags.
+
+``` racket
+(define (randtf)
+  (list-ref '(#f #t #t #f #t #t #f #t #t #f #t) (random 10)))
 ```
