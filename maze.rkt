@@ -88,11 +88,7 @@
   (list-ref '(#f #t #t #f #t #t #f #t #t #f #t) (random 10)))
 
 (define (randdir)
-  (begin (define rand (random 4))
-         (cond ((= rand 0) 'left)
-               ((= rand 1) 'down)
-               ((= rand 2) 'up)
-               ((= rand 3) 'right))))
+  (list-ref '(left down up right) (random 4)))
 
 (define (rand-flags-if-false cell)
          (list
