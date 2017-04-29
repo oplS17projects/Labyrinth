@@ -121,7 +121,7 @@ This then generates a recursive process from the recursive definition.
 
 ## 4. Function Composition
 
-Function composition is all over the place in this code.   One of the better examples of it is in the randomization of the maze, which is accomplished by a two-line procedure that ends up causing four other user-defined procedures to evaluate.  This is the maze randomization procedure:
+Function composition is all over the place in this code.   One of the better examples of it is in the randomization of the maze, which is accomplished by a two-line procedure that ends up causing nine other user-defined procedures to evaluate.  This is the maze randomization procedure:
 
 ``` racket
 (define (make-random maze dimension)
@@ -149,9 +149,21 @@ This invokes the `maze-map` procedure, described above, with the `rand-flags-if-
                     (randtf)))))
 ```
 
-This in turn calls the fourth user-defined procedure, randtf, which randomly produces a true/false flag, with bias toward true flags.
+This in turn calls another user-defined procedure, `randtf`, which randomly produces a true/false flag, with bias toward true flags, and six accessor functions, which access all parts of the cell.  The code for these functions is shown below.
 
 ``` racket
+;; Procedure for randomly generating random true/false values, with bias towards truth
 (define (randtf)
   (list-ref '(#f #t #t #f #t #t #f #t #t #f #t) (random 10)))
+```
+
+``` racket
+;; Getters for all parts of the cell
+(define column car)
+(define row cadr)
+(define (flags cell) (caddr cell))
+(define (left cell) (car (flags cell)))
+(define (down cell) (cadr (flags cell)))
+(define (up cell) (caddr (flags cell)))
+(define (right cell) (cadddr (flags cell)))
 ```
