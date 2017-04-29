@@ -6,7 +6,7 @@
 # Overview
 This project creates random mazes that the user could solve by moving through the maze using keyboard inputs using arrow keys with sound effects.  The main part of the project that I tackled was implementing the maze.
 
-The maze is represented as a list of rows, which are represented as a list of cells.  Each cell is a list built in the following pattern: '(column row (left down up right)), where column and row are the coordinates of a particular cell, and the list of directions contains #t/#f flags to show which directions can be moved in from a particular cell.  Other class concepts used in the construction of the maze are discussed below and include recursion, mapping over lists, data abstraction and object-oriented programming, and function composition.
+The maze is represented as a list of rows, which are represented as a list of cells.  Each cell is a list built in the following pattern: '(column row (left down up right)), where column and row are the coordinates of a particular cell, and the list of directions contains true/false flags to show which directions can be moved in from a particular cell.  Other class concepts used in the construction of the maze are discussed below and include recursion, mapping over lists, data abstraction and object-oriented programming, and function composition.
 
 **Authorship note:** All of the code described here was written by me.
 
@@ -17,7 +17,7 @@ Libraries?  None.  Real men don't need no stinkin' libraries.
 Here is a discussion of the most essential procedures, including a description of how they embody ideas from 
 UMass Lowell's COMP.3010 Organization of Programming languages course.
 
-Five examples are shown and they are individually numbered. 
+Four examples are shown and they are individually numbered. 
 
 ## 1. Recursion
 
