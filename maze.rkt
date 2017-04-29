@@ -85,16 +85,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (randtf)
-  (begin (define rand (random 9))
-         (cond ((= rand 0) #f)
-               ((= rand 1) #t)
-               ((= rand 2) #f)
-               ((= rand 3) #t)
-               ((= rand 4) #t)
-               ((= rand 5) #t)
-               ((= rand 6) #t)
-               ((= rand 7) #t)
-               ((= rand 8) #f))))
+  (list-ref '(#f #t #t #f #t #t #f #t #t #f #t) (random 10)))
 
 (define (randdir)
   (begin (define rand (random 4))
