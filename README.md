@@ -132,7 +132,12 @@ The music player uses state modification to for the loop function, and rand, whi
 
 ``` racket
 (define (loop name count)
-  (if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
+  (if (> count 0) 
+      (begin (set! count (- count 1)) 
+             (if (pair? name) 
+                 (playlist name) 
+                 (play name)) 
+      (loop name count))
 #f))
 ```
 
