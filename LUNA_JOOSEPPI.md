@@ -84,39 +84,43 @@ And here is an exampe use of maze-map in the function that sets the walls in the
 
 ## 3. Object-Oriented Programming and Data Abstraction
 
-The low-level routine for interacting with Google Drive is named ```list-children```. This accepts an ID of a 
-folder object, and optionally, a token for which page of results to produce.
+The maze object is wrapped in a dispatch function in an example of both object-oriented programming and data abstraction.  Here are two excerpts of the that code.  The first is the beginning of the object, with the first few getter procedures shown, and the second excerpt is the dispatch procedure for the object.
 
-A lot of the work here has to do with pagination. Because it's a web interface, one can only obtain a page of
-results at a time. So it's necessary to step through each page. When a page is returned, it includes a token
-for getting the next page. The ```list-children``` just gets one page:
+``` racket
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Maze object    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (make-maze height)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;    Define the maze    ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (define maze (make-random-maze height))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Getters    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Getter for maze -- returns maze structure
+  (define (get-maze)
+    maze)
+  
+  ;; Getter for values in cell -- version where you pass coordinates
+  (define (get-cell-values-coords part row column)
+    (cond ((equal? part 'left) (car (get-directions-list row column)))
+          ((equal? part 'down) (cadr (get-directions-list row column)))
+          ((equal? part 'up) (caddr (get-directions-list row column)))
+          ((equal? part 'right) (cadddr (get-directions-list row column)))
+          ((equal? part 'dir-list) (get-directions-list row column))
+          ((equal? part 'cell) (get-cell row column))))
+  
 ```
-
-```
-
-The interesting routine is ```list-all-children```. This routine is directly invoked by the user.
-It optionally accepts a page token; when it's used at top level this parameter will be null.
-
-The routine uses ```let*``` to retrieve one page of results (using the above ```list-children``` procedure)
-and also possibly obtain a token for the next page.
-
-If there is a need to get more pages, the routine uses ```append``` to pre-pend the current results with 
-a recursive call to get the next page (and possibly more pages).
-
-Ultimately, when there are no more pages to be had, the routine terminates and returns the current page. 
-
-This then generates a recursive process from the recursive definition.
-```
-(define (list-all-children folder-id . next-page-token)
-  (let* ((this-page (if (= 0 (length next-page-token))
-                      (list-children folder-id)
-                      (list-children folder-id (car next-page-token))))
-         (page-token (hash-ref this-page 'nextPageToken #f)))
-    (if page-token
-        (append (get-files this-page)
-              (list-all-children folder-id page-token))
-        (get-files this-page))))
+``` racket
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Dispatch    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (define (dispatch message)
+    (cond ((eq? message 'get-cell-values-coords) get-cell-values-coords)
+          ((eq? message 'get-cell-values-cell) get-cell-values-cell)
+          ((eq? message 'get-max-cell) get-max-cell)
+          ((eq? message 'get-min-cell) get-min-cell)
+          ((eq? message 'get-height) get-height)
+          ((eq? message 'row-map) row-map)
+          ((eq? message 'maze-map) maze-map)
+          ((eq? message 'get-maze) get-maze)))
 ```
 
 ## 4. Function Composition
