@@ -51,7 +51,6 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
 #t))
 (map-help 0 0))
 ```
-`
  
 ##2 Object-orientation:
 
@@ -73,7 +72,7 @@ The music player is implemented as an object.  Below is an excerpt of the code f
 (else (error "Unknown option: music player"
 method))))
 option)
-``
+```
 
 The music player takes a track has three method, play, loop, and playlist. And to use it, you pass it the name
 of the song for a list of the songs you want to play and it will play it in that order. Play takes the name of the song and find the first occurance in track using member(which returns the rest of the list) and then use first to extract it to play. There is also function composition since loop and playlist are built using play. Playlist calls play on each song in the list it recieves. Loop takes in a counter(how many times) and uses state modification to decrement the counter.
@@ -94,7 +93,7 @@ The music player uses state modification for the loop function.
 (play name)) 
 (loop name count))
 #f))
-``
+```
 
 ##4 Functional approaches:
 
