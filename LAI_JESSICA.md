@@ -103,13 +103,13 @@ Create map is based on place tile
 
 ```
 (begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
-``
+```
 
 Place tile is based on tile.
 
 ```
   (place-image (tile size row column) (+ (* row size) (/ size 2)) (+ (* column size) (/ size 2)) field)
-``
+```
 
 Tile is based on wall
 
