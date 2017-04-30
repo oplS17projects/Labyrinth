@@ -1,1 +1,0 @@
-("6.7" ("50b6f13e0e9e93cd6955c460052107f047a516dd" . "718fe50c26e165b716762348551e1a4b743f0f58") (collects #"2htdp" #"universe.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"gui.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
