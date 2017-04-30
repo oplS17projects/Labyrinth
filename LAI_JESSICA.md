@@ -136,7 +136,7 @@ Because of the way place-image is set up, I decided to use let* to define the co
 (place-image (wall size (/ size 4) down-c) (/ size 2) size
 (place-image (wall (/ size 4) size right-c) size (/ size 2)
 (rectangle size size "solid" "gray")))))))
-``
+```
 
 
 
