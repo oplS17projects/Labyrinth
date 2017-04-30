@@ -50,7 +50,8 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
 (begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
 #t))
 (map-help 0 0))
-``
+```
+`
  
 ##2 Object-orientation:
 
