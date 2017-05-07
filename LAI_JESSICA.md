@@ -52,7 +52,7 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
   (map-help 0 0))
 ```
  
-##2 Object-orientation:
+## 2. Object-orientation:
 
 The music player is implemented as an object.  Below is an excerpt of the code for the music player.
 
@@ -80,7 +80,7 @@ of the song for a list of the songs you want to play and it will play it in that
 We only ended up using play in our game though.
 
 
-##3 State-modification:
+## 3. State-modification:
 
 The music player uses state modification for the loop function.
 
@@ -95,7 +95,7 @@ The music player uses state modification for the loop function.
       #f))
 ```
 
-##4 Functional approaches:
+## 4. Functional approaches:
 
 Many of the function I wrote are built on top of each other.
 
@@ -121,7 +121,7 @@ Tile is based on wall
 (rectangle size size "solid" "gray")))
 ```
 
-##5 Using Let*:
+## 5. Using Let*:
 
 Because of the way place-image is set up, I decided to use let* to define the color of each wall(depending on if you can move in that direction or not) before the placement. If you can move in the direction, the color would be gray, which blends into the background. Otherwise the color will be brown to indicate a wall.
 
