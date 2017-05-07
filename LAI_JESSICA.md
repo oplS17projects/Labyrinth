@@ -43,12 +43,12 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
 
 ``` racket
 (define (create-map)
-(define (map-help cur-row cur-col)
-  (if (< cur-col ((maze 'get-height)))
-      (if (< cur-row ((maze 'get-height)))
-          (begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
-          (begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
-      #t))
+  (define (map-help cur-row cur-col)
+    (if (< cur-col ((maze 'get-height)))
+        (if (< cur-row ((maze 'get-height)))
+            (begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
+            (begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
+        #t))
   (map-help 0 0))
 ```
  
