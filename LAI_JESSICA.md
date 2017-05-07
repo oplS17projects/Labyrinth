@@ -44,12 +44,12 @@ Tail recursion is used to build the maze and to place the tiles in to the field.
 ``` racket
 (define (create-map)
 (define (map-help cur-row cur-col)
-(if (< cur-col ((maze 'get-height)))
-(if (< cur-row ((maze 'get-height)))
-(begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
-(begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
-#t))
-(map-help 0 0))
+  (if (< cur-col ((maze 'get-height)))
+      (if (< cur-row ((maze 'get-height)))
+          (begin (place-tile cur-row cur-col) (set! cur-row (+ 1 cur-row)) (map-help cur-row cur-col))
+          (begin (set! cur-col (+ 1 cur-col)) (set! cur-row 0) (map-help cur-row cur-col)))
+      #t))
+  (map-help 0 0))
 ```
  
 ##2 Object-orientation:
@@ -58,20 +58,20 @@ The music player is implemented as an object.  Below is an excerpt of the code f
 
 ``` racket
 (define (music-player track)
-(define (play name)
-(play-sound (first (member name track)) #f) #f)
-(define (loop name count)
-(if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
-#f))
-(define (playlist list)
-(for-each (lambda (name) (play name)) list)#f)
-(define (option method)
-(cond ((eq? method 'play) play)
-((eq? method 'loop) loop)
-((eq? method 'playlist) playlist)
-(else (error "Unknown option: music player"
-method))))
-option)
+  (define (play name)
+    (play-sound (first (member name track)) #f) #f)
+  (define (loop name count)
+    (if (> count 0) (begin (set! count (- count 1)) (if(pair? name) (playlist name) (play name)) (loop name count))
+        #f))
+  (define (playlist list)
+    (for-each (lambda (name) (play name)) list)#f)
+  (define (option method)
+    (cond ((eq? method 'play) play)
+          ((eq? method 'loop) loop)
+          ((eq? method 'playlist) playlist)
+          (else (error "Unknown option: music player"
+                       method))))
+  option)
 ```
 
 The music player takes a track has three method, play, loop, and playlist. And to use it, you pass it the name
@@ -86,13 +86,13 @@ The music player uses state modification for the loop function.
 
 ``` racket
 (define (loop name count)
-(if (> count 0) 
-(begin (set! count (- count 1)) 
-(if (pair? name) 
-(playlist name) 
-(play name)) 
-(loop name count))
-#f))
+  (if (> count 0) 
+      (begin (set! count (- count 1)) 
+             (if (pair? name) 
+                 (playlist name) 
+                 (play name)) 
+             (loop name count))
+      #f))
 ```
 
 ##4 Functional approaches:
@@ -127,17 +127,13 @@ Because of the way place-image is set up, I decided to use let* to define the co
 
 ``` racket
 (define (tile size row column)
-(let* ((left-c (if ((maze 'get-cell-values-coords) 'left row column) "gray" "brown"))
-(down-c (if ((maze 'get-cell-values-coords) 'down row column) "gray" "brown"))
-(up-c (if ((maze 'get-cell-values-coords) 'up row column) "gray" "brown"))
-(right-c (if ((maze 'get-cell-values-coords) 'right row column) "gray" "brown")))
-(place-image (wall (/ size 4) size left-c) 0 (/ size 2)
-(place-image (wall size (/ size 4) up-c) (/ size 2) 0
-(place-image (wall size (/ size 4) down-c) (/ size 2) size
-(place-image (wall (/ size 4) size right-c) size (/ size 2)
-(rectangle size size "solid" "gray")))))))
+  (let* ((left-c (if ((maze 'get-cell-values-coords) 'left row column) "gray" "brown"))
+         (down-c (if ((maze 'get-cell-values-coords) 'down row column) "gray" "brown"))
+         (up-c (if ((maze 'get-cell-values-coords) 'up row column) "gray" "brown"))
+         (right-c (if ((maze 'get-cell-values-coords) 'right row column) "gray" "brown")))
+    (place-image (wall (/ size 4) size left-c) 0 (/ size 2)
+                 (place-image (wall size (/ size 4) up-c) (/ size 2) 0
+                              (place-image (wall size (/ size 4) down-c) (/ size 2) size
+                                           (place-image (wall (/ size 4) size right-c) size (/ size 2)
+                                                        (rectangle size size "solid" "gray")))))))
 ```
-
-
-
-
